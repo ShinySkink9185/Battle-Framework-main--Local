@@ -1,0 +1,7 @@
+# Godot 4+ specific ignores
+.godot/
+.build/
+/android/
+assets/audio/bgm/bre_right_back_render.png
+assets/audio/bgm/bre_right_back_render.png.import
+assets/audio/bgm/CoolSoft_MIDIMapper_2.1.2.exe
