@@ -15,9 +15,10 @@ var characters: Array[String] = [
 ]
 
 var battle_stages: Array[String] = [
-	"emeraldbeach", 
-	"amysroom", 
-	"battlehwy", 
+	"Test",
+	"emeraldbeach",
+	"amysroom",
+	"battlehwy",
 	"chaoruins",
 	"hologram",
 	"holysummit",

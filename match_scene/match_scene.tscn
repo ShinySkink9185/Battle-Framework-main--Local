@@ -5,7 +5,7 @@
 [node name="MatchScene" type="Node3D"]
 script = ExtResource("1_wwbcy")
 test_characters = Array[String](["shadow", "tails"])
-test_stage = "holysummit"
+test_stage = "Test"
 
 [node name="SubViewportGridContainer" type="GridContainer" parent="."]
 unique_name_in_owner = true
