@@ -1,13 +1,38 @@
 [gd_scene format=3 uid="uid://d3kerhf8srvoh"]
 
-[ext_resource type="Script" uid="uid://wit1xrf2xe8b" path="res://dialogue.gd" id="1_xgrt4"]
+[ext_resource type="Script" uid="uid://wit1xrf2xe8b" path="res://UI/Dialogue/dialogue.gd" id="1_xgrt4"]
 [ext_resource type="Texture2D" uid="uid://cgd35bk6tvcys" path="res://assets/ui/Dialogue/DialogueBoxes.png" id="2_hix8u"]
 [ext_resource type="FontFile" uid="uid://cvddlxw0mnsr8" path="res://menus/fonts/SonicBattleFont.png" id="3_hix8u"]
 [ext_resource type="AudioStream" uid="uid://bdgnhqv5dt6tf" path="res://assets/audio/sfx/Dialogue/DialogueRegular.wav" id="4_o83p3"]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_wf0ws"]
+atlas = ExtResource("2_hix8u")
+region = Rect2(7, 9, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_bc1hc"]
+atlas = ExtResource("2_hix8u")
+region = Rect2(37, 17, 1, 1)
+
 [sub_resource type="AtlasTexture" id="AtlasTexture_o83p3"]
 atlas = ExtResource("2_hix8u")
 region = Rect2(0, 0, 240, 48)
+
+[sub_resource type="Animation" id="Animation_bc1hc"]
+resource_name = "Exiting"
+length = 0.5
+step = 0.016666668
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("CanvasLayer:offset")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.50000006),
+"transitions": PackedFloat32Array(0.5, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(0, 48)]
+}
 
 [sub_resource type="Animation" id="Animation_hix8u"]
 resource_name = "Idle"
@@ -60,6 +85,7 @@ tracks/0/keys = {
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_wf0ws"]
 _data = {
+&"Exiting": SubResource("Animation_bc1hc"),
 &"Idle": SubResource("Animation_hix8u"),
 &"Initial": SubResource("Animation_o83p3"),
 &"RESET": SubResource("Animation_wf0ws")
@@ -77,6 +103,24 @@ script = ExtResource("1_xgrt4")
 [node name="CanvasLayer" type="CanvasLayer" parent="." unique_id=1389057305]
 offset = Vector2(0, 48)
 transform = Transform2D(1, 0, 0, 1, 0, 48)
+
+[node name="BlackBackground" type="TextureRect" parent="CanvasLayer" unique_id=800318061]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_wf0ws")
+
+[node name="WhiteBackground" type="TextureRect" parent="CanvasLayer" unique_id=42725127]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bc1hc")
 
 [node name="DialogueBox" type="TextureRect" parent="CanvasLayer" unique_id=913078642]
 anchors_preset = 7
@@ -106,6 +150,24 @@ grow_vertical = 0
 theme_override_fonts/font = ExtResource("3_hix8u")
 theme_override_font_sizes/font_size = 8
 autowrap_mode = 3
+
+[node name="WhiteBackgroundFull" type="TextureRect" parent="CanvasLayer" unique_id=1845993565]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_bc1hc")
+
+[node name="BlackBackgroundFull" type="TextureRect" parent="CanvasLayer" unique_id=811916857]
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = SubResource("AtlasTexture_wf0ws")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=938306969]
 libraries/ = SubResource("AnimationLibrary_wf0ws")

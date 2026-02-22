@@ -15,15 +15,24 @@ extends Control
 
 # Timer before next letter.
 var letterTimer := 0.0
+# Storage of dialogue that's yet to be printed.
 var currentDialogue: String = ""
+# Can the player advance the text?
 var confirmOption = false
+# List of dialogue on storage
 var dialogueList := []
+# Did the textbox just appear? Used to prevent things breaking.
 var justStarted = true
+# Is the text currently going at fast pace?
 var goingFast = false
+# Toggles the black background showing up or not.
+var paperMarioMode = false
 
 # These can be changed depending on Speaker settings.
-# TODO: change this to the Sonic Battle dialogue
 var talkSound = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav"
+
+# TODO: make fadeouts a thing.
+# Fadeout length is usually 33 frames out of 60.
 
 # Default is 5 frames.
 const TEXTSPEED = (1.0/60.0) * 5.0
@@ -62,7 +71,7 @@ func _physics_process(delta):
 		confirmOption = true
 	
 	# Speed up the textbox, advance it, or delete it.
-	if Input.is_action_just_pressed("jump1") or Input.is_action_just_pressed("jump2"):
+	if Input.is_action_just_pressed("jump1"):
 		if confirmOption == true:
 			confirmOption = false
 			# Remove the last used object.
@@ -71,7 +80,9 @@ func _physics_process(delta):
 			goingFast = false
 			# If that's all the dialogue, remove the textbox.
 			if not dialogueList:
-				queue_free()
+				# TODO: add option for either just deleting it or
+				# doing the regular dialogue exit
+				animation.play("Exiting")
 			else:
 				# Get the text currently in the box to disappear.
 				if dialogueList[0].refreshBox == true:
@@ -82,8 +93,6 @@ func _physics_process(delta):
 			# Speed up the text.
 			goingFast = true
 		
-			
-
 # Adds a dialogueEntry class that stores all the info of a single piece of dialogue
 class dialogueEntry:
 	# Our info
@@ -105,3 +114,5 @@ func defineDialogue(setDialogue: String, setRefreshBox: bool = true):
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Initial":
 		animation.play("Idle")
+	elif anim_name == "Exiting":
+		queue_free()
