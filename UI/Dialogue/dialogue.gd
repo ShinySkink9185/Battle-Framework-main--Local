@@ -22,11 +22,16 @@ var letterTimer := 0.0 ## Time before the next letter is printed.
 var currentDialogue: String = "" ## Dialogue storage in memory that's yet to be printed.
 var confirmOption = false ## Can the player advance the text?
 var dialogueList := [] ## List of all dialogue currently on storage.
+var speakerList := [] ## List of all Speakers currently on storage.
 var justStarted = true ## Did this textbox just start existing? Prevents things from breaking.
 var goingFast = false ## Is the text advancing at high speed?
 var backgroundShade = false ## Will the black background shade take effect? Can be modified before adding.
 
 enum textBoxShape {JAGGED1, JAGGED2, JAGGED3, NARRATION} ## Determines shape of the textbox.
+enum speakerPosition {LEFT = 1, CENTER = 2, MIDDLE = 2, RIGHT = 3}
+enum speakerDirection {LEFT = 1, RIGHT = 2}
+enum speakerEnterMode {LEFT = 1, RIGHT = 2, FADE = 3}
+enum speakerExitMode {LEFT = 1, RIGHT = 2, FADE = 3}
 
 var talkSound = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav" ## The talk sound that's currently being used.
 
@@ -105,19 +110,36 @@ class DialogueEntry:
 		dialogue = setDialogue
 		refreshBox = setRefreshBox
 
-class DialogueSpeaker:
-	pass
-
-# This defines a speaker.
-func defineSpeaker(name: String):
-	pass
-
 # Adds new dialogue to the queue using the class
 func addDialogue(setDialogue: String, setRefreshBox: bool = true):
 	# Instantiate a class
 	var dialogue = DialogueEntry.new(setDialogue, setRefreshBox)
 	# Then, insert that object into our array!
 	dialogueList.append(dialogue);
+
+# Speaker class that defines a Speaker.
+class DialogueSpeaker:
+	var name: String
+	var poses: Array[String]
+	var poseCoordinates: Array[Vector2]
+	var sound: String
+	
+	# Parameterized constructor
+	func _init(setName: String, setPoses: Array[String], setPoseCoordinates: Array[Vector2] = [Vector2(0, 0)], setSound: String = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav"):
+		name = setName
+		poses = setPoses
+		poseCoordinates = setPoseCoordinates
+		# TODO: if number of coordinates is less than amount of poses,
+		# append Vector2(0, 0) values to the array until we get there
+		sound = setSound
+
+# This defines a speaker.
+func defineSpeaker(setName: String, setPoses: Array[String], setPoseCoordinates: Array[Vector2] = [Vector2(0, 0)], setSound: String = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav"):
+	var speaker = DialogueSpeaker.new(setName, setPoses, setPoseCoordinates, setSound)
+	speakerList.append(speaker)
+
+func addSpeaker(setName: String, setPose: int, setPosition: int, setEnterMode: int, setDirection: int, setDelay: bool = true):
+	pass
 
 # Animations for the textbox.
 func _on_animation_player_animation_finished(anim_name):

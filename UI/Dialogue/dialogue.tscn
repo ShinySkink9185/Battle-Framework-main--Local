@@ -3,6 +3,7 @@
 [ext_resource type="Script" uid="uid://wit1xrf2xe8b" path="res://UI/Dialogue/dialogue.gd" id="1_xgrt4"]
 [ext_resource type="Texture2D" uid="uid://cgd35bk6tvcys" path="res://assets/ui/Dialogue/DialogueBoxes.png" id="2_hix8u"]
 [ext_resource type="FontFile" uid="uid://cvddlxw0mnsr8" path="res://menus/fonts/SonicBattleFont.png" id="3_hix8u"]
+[ext_resource type="Texture2D" uid="uid://g6swkwvdx8x2" path="res://characters/sonic/sprites/SonicDialoguePortraits.png" id="3_wf0ws"]
 [ext_resource type="AudioStream" uid="uid://bdgnhqv5dt6tf" path="res://assets/audio/sfx/Dialogue/DialogueRegular.wav" id="4_o83p3"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_wf0ws"]
@@ -12,6 +13,10 @@ region = Rect2(7, 9, 1, 1)
 [sub_resource type="AtlasTexture" id="AtlasTexture_bc1hc"]
 atlas = ExtResource("2_hix8u")
 region = Rect2(37, 17, 1, 1)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_pgf0d"]
+atlas = ExtResource("3_wf0ws")
+region = Rect2(0, 0, 96, 96)
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_o83p3"]
 atlas = ExtResource("2_hix8u")
@@ -207,6 +212,28 @@ texture = SubResource("AtlasTexture_bc1hc")
 offset = Vector2(0, 48)
 transform = Transform2D(1, 0, 0, 1, 0, 48)
 
+[node name="Speaker1" type="TextureRect" parent="CanvasLayer" unique_id=777422764]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = 17.0
+offset_top = -141.0
+offset_right = 113.0
+offset_bottom = -45.0
+grow_horizontal = 2
+grow_vertical = 0
+texture = SubResource("AtlasTexture_pgf0d")
+
+[node name="Speaker2" type="TextureRect" parent="CanvasLayer" unique_id=1301869179]
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="Speaker3" type="TextureRect" parent="CanvasLayer" unique_id=633659203]
+offset_right = 40.0
+offset_bottom = 40.0
+
 [node name="DialogueBox" type="TextureRect" parent="CanvasLayer" unique_id=913078642]
 anchors_preset = 7
 anchor_left = 0.5
@@ -267,6 +294,9 @@ libraries/ = SubResource("AnimationLibrary_jr753")
 stream = ExtResource("4_o83p3")
 
 [node name="AudioStreamExtra" type="AudioStreamPlayer" parent="." unique_id=861690132]
+
+[node name="AnimationPlayerSpeaker" type="AnimationPlayer" parent="." unique_id=1556779837]
+root_node = NodePath("../AudioStreamExtra")
 
 [connection signal="animation_finished" from="AnimationPlayerTextbox" to="." method="_on_animation_player_animation_finished"]
 [connection signal="animation_finished" from="AnimationPlayerShade" to="." method="_on_animation_player_shade_animation_finished"]
