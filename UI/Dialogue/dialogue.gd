@@ -1,35 +1,34 @@
 extends Control
-
-# Sonic Battle Dialogue
-# by ShinySkink9185
-# This was borrowed from my Klonoa Project Test.
-# I hope Mobi doesn't mind me shilling it...
+## A dialogue system set up like that of Sonic Battle (GBA).
+## When instantiating this node, there are certain variables you can set before
+## you make the dialogue appear as a child.
+##
+## To use this, simply drag and drop this Scene from the file system
+## into the map you want to use the dialogue in.
+##
+## Created by ShinySkink9185, being borrowed from Klonoa Project Test.
+## I hope Mobi doesn't mind me shilling it...!
 
 # Labels for text.
 @onready var textLabel = $CanvasLayer/Text
-@onready var animation = $AnimationPlayer
+@onready var animationTextbox = $AnimationPlayerTextbox
+@onready var animationShade = $AnimationPlayerShade
 
 # Sound banks.
 @onready var soundBankTalk = $AudioStreamTalk
 @onready var soundBankExtra = $AudioStreamExtra
 
-# Timer before next letter.
-var letterTimer := 0.0
-# Storage of dialogue that's yet to be printed.
-var currentDialogue: String = ""
-# Can the player advance the text?
-var confirmOption = false
-# List of dialogue on storage
-var dialogueList := []
-# Did the textbox just appear? Used to prevent things breaking.
-var justStarted = true
-# Is the text currently going at fast pace?
-var goingFast = false
-# Toggles the black background showing up or not.
-var paperMarioMode = false
+var letterTimer := 0.0 ## Time before the next letter is printed.
+var currentDialogue: String = "" ## Dialogue storage in memory that's yet to be printed.
+var confirmOption = false ## Can the player advance the text?
+var dialogueList := [] ## List of all dialogue currently on storage.
+var justStarted = true ## Did this textbox just start existing? Prevents things from breaking.
+var goingFast = false ## Is the text advancing at high speed?
+var backgroundShade = false ## Will the black background shade take effect? Can be modified before adding.
 
-# These can be changed depending on Speaker settings.
-var talkSound = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav"
+enum textBoxShape {JAGGED1, JAGGED2, JAGGED3, NARRATION} ## Determines shape of the textbox.
+
+var talkSound = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav" ## The talk sound that's currently being used.
 
 # TODO: make fadeouts a thing.
 # Fadeout length is usually 33 frames out of 60.
@@ -38,17 +37,16 @@ var talkSound = "res://assets/audio/sfx/Dialogue/DialogueRegular.wav"
 const TEXTSPEED = (1.0/60.0) * 5.0
 const TEXTSPEEDFAST = (1.0/60.0)
 
-func _init():
-	# testing dialogue, remove later
-	defineDialogue("Testing 1!", true)
-	defineDialogue("Testing 2!", true)
-	defineDialogue("This text is really long and boring...")
+func _init(setBackgroundShade: bool = false):
+	# Set Paper Mario Mode animations.
+	backgroundShade = setBackgroundShade
+	if backgroundShade == true:
+		animationShade.play("Initial")
 
 func _physics_process(delta):
 	# Keep refreshing until the first bit of dialogue appears.
-	
 	if justStarted == true and not currentDialogue:
-		if dialogueList and animation.current_animation == "Idle":
+		if dialogueList and animationTextbox.current_animation == "Idle":
 			currentDialogue = dialogueList[0].dialogue
 			justStarted = false
 		return
@@ -82,7 +80,10 @@ func _physics_process(delta):
 			if not dialogueList:
 				# TODO: add option for either just deleting it or
 				# doing the regular dialogue exit
-				animation.play("Exiting")
+				animationTextbox.play("Exiting")
+				# Taking away the background shade
+				if backgroundShade:
+					animationShade.play("Exiting")
 			else:
 				# Get the text currently in the box to disappear.
 				if dialogueList[0].refreshBox == true:
@@ -93,8 +94,8 @@ func _physics_process(delta):
 			# Speed up the text.
 			goingFast = true
 		
-# Adds a dialogueEntry class that stores all the info of a single piece of dialogue
-class dialogueEntry:
+# Adds a DialogueEntry class that stores all the info of a single piece of dialogue
+class DialogueEntry:
 	# Our info
 	var dialogue: String = ""
 	var refreshBox: bool = true
@@ -104,15 +105,30 @@ class dialogueEntry:
 		dialogue = setDialogue
 		refreshBox = setRefreshBox
 
+class DialogueSpeaker:
+	pass
+
+# This defines a speaker.
+func defineSpeaker(name: String):
+	pass
+
 # Adds new dialogue to the queue using the class
-func defineDialogue(setDialogue: String, setRefreshBox: bool = true):
+func addDialogue(setDialogue: String, setRefreshBox: bool = true):
 	# Instantiate a class
-	var dialogue = dialogueEntry.new(setDialogue, setRefreshBox)
+	var dialogue = DialogueEntry.new(setDialogue, setRefreshBox)
 	# Then, insert that object into our array!
 	dialogueList.append(dialogue);
 
+# Animations for the textbox.
 func _on_animation_player_animation_finished(anim_name):
 	if anim_name == "Initial":
-		animation.play("Idle")
+		animationTextbox.play("Idle")
+	elif anim_name == "Exiting":
+		queue_free()
+
+# Animations for the background shade.
+func _on_animation_player_shade_animation_finished(anim_name):
+	if anim_name == "Initial":
+		animationShade.play("Idle")
 	elif anim_name == "Exiting":
 		queue_free()

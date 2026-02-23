@@ -38,6 +38,9 @@ func _process(delta: float) -> void:
 
 
 func _next_menu():
+	if selected_mode == MODE.STORY:
+		# TODO: Change this scene to instead go to the Story Mode select.
+		SceneChanger.change_scene_to_file("res://levels/STORYMAP/EmeraldTown.tscn")
 	if selected_mode == MODE.BATTLE:
 		SceneChanger.change_scene_to_file("res://menus/player_setup.tscn")
 
@@ -64,7 +67,7 @@ func change_mode(p_mode):
 	fade_in.play()
 	fade_in.tween_property(current_sprite, "modulate:a", 1, 0.2)
 	#current_mode_label.text = "<--" + MODE_NAMES[selected_mode] + "-->"
-	not_ready_yet.visible = (selected_mode != MODE.BATTLE)
+	not_ready_yet.visible = (selected_mode != MODE.BATTLE) and (selected_mode != MODE.STORY)
 
 
 func arrow_animation(arrow_node: Sprite2D):
